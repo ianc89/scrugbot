@@ -1,6 +1,8 @@
-import discord
 import os
-from dotenv import load_dotenv
+os.system("pip3 install discord.py")
+from keep_alive import keep_alive
+import discord
+#from dotenv import load_dotenv
 import requests
 import json
 import re
@@ -8,7 +10,7 @@ import re
 from db import dbcsv
 
 # Load .env file
-load_dotenv()
+#load_dotenv()
 
 # Discord bot client
 client = discord.Client()
@@ -76,10 +78,15 @@ async def on_message(message):
         else:
             await message.channel.send(f"Uhh ohh {message.author.display_name}...")
 
+    x = wordle_match.match(m.content)
+    if x:
+        wordledb.write([m.id,m.created_at, m.author.display_name, x.groups()[0],x.groups()[1],x.groups()[2]])
+
     # Wordle - get a word
     if message.content.startswith("!scrugbot"):
         if "word" in message.content:
             await message.channel.send(f"Why not try ... {get_word()}")
 
 # Run client
+keep_alive()
 client.run(os.getenv('TOKEN'))

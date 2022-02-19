@@ -15,8 +15,10 @@ import csv
 
 class dbcsv(object):
 	def __init__(self, path):
-		self.csvfile = open(path, 'a', newline='')
+		self.path = path
 
 	def write(self, row):
-		writer = csv.writer(self.csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
+		csvfile = open(path, 'a', newline='')
+		writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 		writer.writerow(row)
+		csvfile.close()
