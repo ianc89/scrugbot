@@ -72,3 +72,35 @@ def get_wordle_results():
             message += r+"\n"
     message += "\n"
     return message
+
+def get_quordle_results():
+    import pandas
+    df = pandas.read_csv("quordle.csv",header=None)
+    # 0 - msg id, 1 - timestamp, 2 - username, 3 - Wordle, 4 - #wordle, 5 - result
+    df = df.drop([0,1,3,4], axis=1)
+    res = dict(df.value_counts())
+    # get list of users and generate results
+    users = {}
+    for r in res:
+        if r[0] not in users:
+            users[r[0]] = ["00-08:","08-16:","16-24:","24-32:","32+  :"]
+        val = int(r[1])
+        if val < 8:
+            users[r[0]][0] += "+"*res[r]
+        elif val < 16:
+            users[r[0]][1] += "+"*res[r]
+        elif val < 32:
+            users[r[0]][2] += "+"*res[r]
+        elif val < 36:
+            users[r[0]][3] += "+"*res[r]
+        else:
+            users[r[0]][4] += "+"*res[r]
+
+    # Now prepare message
+    message = "\n"
+    for user in users:
+        message += "---- "+user+"\n"
+        for r in users[user]:
+            message += r+"\n"
+    message += "\n"
+    return message
