@@ -38,7 +38,7 @@ async def on_message(message):
         await message.channel.send(f'Hello {message.author.display_name}!')
 
     if message.content == '!scrugbot help':
-        help_msg = "Use scrugbot as !scrugbot [rebuild|word|wordle]\nScrugbot will also store wordle and quordle results automatically and give you some motivation!\nUse rebuild only if the result databases need to be rebuilt.\nUse word to get a 5 letter word tip.\nUse wordle to see the results of all users!\n"
+        help_msg = "Use scrugbot as !scrugbot [rebuild|word|wordle|quordle]\nScrugbot will also store wordle and quordle results automatically and give you some motivation!\nUse rebuild only if the result databases need to be rebuilt.\nUse word to get a 5 letter word tip.\nUse wordle|quordle to see the results of all users!\n"
         await message.channel.send(help_msg)
 
     if message.content == '!scrugbot rebuild':
