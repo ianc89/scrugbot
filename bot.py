@@ -51,7 +51,7 @@ async def on_message(message):
 
     # Wordle - print results
     if message.content == '!scrugbot wordle':
-        await message.channel.send(get_user_results())
+        await message.channel.send(get_wordle_results())
 
     # Wordle responses
     x = wordle_match.match(message.content)
