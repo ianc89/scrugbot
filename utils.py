@@ -11,7 +11,7 @@ def get_word():
             return x
     return get_word()
 
-async def read_history(client, wordledb, wordle_match):
+async def read_history(client, wordledb, wordle_match, quordle=False):
     # Reinitialise file
     wordledb.rebuild()
     # Channel ID
@@ -24,7 +24,13 @@ async def read_history(client, wordledb, wordle_match):
     for m in messages:
         x = wordle_match.match(m.content)
         if x:
-            wordledb.write([m.id,m.created_at, m.author.display_name, x.groups()[0],x.groups()[1],x.groups()[2]])
+            if not quordle:
+                wordledb.write([m.id,m.created_at, m.author.display_name, x.groups()[0],x.groups()[1],x.groups()[2]])
+            else:
+                results = get_emoji_numbers(message.content)
+                total = sum(results)
+                wordledb.write([message.id, message.created_at, username, x.groups()[0], x.groups()[1], total])
+        
     
 def get_emoji_numbers(text):
     # Function to get emoji numbers
