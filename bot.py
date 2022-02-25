@@ -2,7 +2,7 @@ import os
 import re
 import discord
 import dotenv
-from utils import get_word, read_history, get_emoji_numbers
+from utils import get_word, read_history, get_emoji_numbers, get_wordle_results
 from db import dbcsv
 
 # Load .env file
@@ -37,13 +37,21 @@ async def on_message(message):
     if message.content == '!scrugbot':
         await message.channel.send(f'Hello {message.author.display_name}!')
 
+    if message.content == '!scrugbot help':
+        help_msg = "Use scrugbot as !scrugbot [rebuild|word|wordle]\nScrugbot will also store wordle and quordle results automatically and give you some motivation!\nUse rebuild only if the result databases need to be rebuilt.\nUse word to get a 5 letter word tip.\nUse wordle to see the results of all users!\n"
+        await message.channel.send(help_msg)
+
     if message.content == '!scrugbot rebuild':
         await message.channel.send(f'Rebuilding results')
         await read_history(client, wordledb, wordle_match)
 
     # Wordle - get a word
-    if message.content == "!scrugbot word":
+    if message.content == '!scrugbot word':
         await message.channel.send(f"Why not try ... {get_word()}")
+
+    # Wordle - print results
+    if message.content == '!scrugbot wordle':
+        await message.channel.send(get_user_results())
 
     # Wordle responses
     x = wordle_match.match(message.content)

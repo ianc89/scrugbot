@@ -39,3 +39,36 @@ def get_emoji_numbers(text):
             found_emoji.append(real)
 
     return found_emoji
+
+def get_wordle_results():
+    import pandas
+    df = pandas.read_csv("wordle.csv",header=None)
+    # 0 - msg id, 1 - timestamp, 2 - username, 3 - Wordle, 4 - #wordle, 5 - result
+    df = df.drop([0,1,3,4], axis=1)
+    res = dict(df.value_counts())
+    # get list of users and generate results
+    users = {}
+    for r in res:
+        if r[0] not in users:
+            users[r[0]] = ["1:","2:","3:","4:","5:","6:"]
+        if r[1] == "1/6":
+            users[r[0]][0] += "+"*res[r]
+        elif r[1] == "2/6":
+            users[r[0]][1] += "+"*res[r]
+        elif r[1] == "3/6":
+            users[r[0]][2] += "+"*res[r]
+        elif r[1] == "4/6":
+            users[r[0]][3] += "+"*res[r]
+        elif r[1] == "5/6":
+            users[r[0]][4] += "+"*res[r]
+        elif r[1] == "6/6":
+            users[r[0]][5] += "+"*res[r]
+
+    # Now prepare message
+    message = "\n"
+    for user in users:
+        message += "---- "+user+"\n"
+        for r in users[user]:
+            message += r+"\n"
+    message += "\n"
+    return message
