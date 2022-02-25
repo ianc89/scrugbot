@@ -75,7 +75,8 @@ def get_wordle_results():
     for user in users:
         message += "---- "+user+"\n```"
         for r in users[user]:
-            message += r+"```\n"
+            message += r+"\n"
+        message += "```"
     message += "\n"
     return message
 
@@ -107,6 +108,7 @@ def get_quordle_results():
     for user in users:
         message += "---- "+user+"\n```"
         for r in users[user]:
-            message += r+"```\n"
+            message += r+"\n"
+        message += "```"
     message += "\n"
     return message
