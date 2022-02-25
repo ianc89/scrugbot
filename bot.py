@@ -44,7 +44,7 @@ async def on_message(message):
     if message.content == '!scrugbot rebuild':
         await message.channel.send(f'Rebuilding results')
         await read_history(client, wordledb, wordle_match)
-        await read_history(client, quordldb, quordle_match)
+        await read_history(client, quordldb, quordle_match, True)
 
     # Wordle - get a word
     if message.content == '!scrugbot word':
