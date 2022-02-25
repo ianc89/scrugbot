@@ -27,9 +27,9 @@ async def read_history(client, wordledb, wordle_match, quordle=False):
             if not quordle:
                 wordledb.write([m.id,m.created_at, m.author.display_name, x.groups()[0],x.groups()[1],x.groups()[2]])
             else:
-                results = get_emoji_numbers(message.content)
+                results = get_emoji_numbers(m.content)
                 total = sum(results)
-                wordledb.write([message.id, message.created_at, username, x.groups()[0], x.groups()[1], total])
+                wordledb.write([m.id, m.created_at, m.author.display_name, x.groups()[0], x.groups()[1], total])
         
     
 def get_emoji_numbers(text):
