@@ -130,9 +130,10 @@ def get_chatbot_conversation(message):
                                 headers=request_headers,
                                 data=data)
     ret = json.loads(response.content.decode('utf-8'))
+    
     # If currently loading, enter into a recursive function
-    if "currently loading" in ret:
-        return get_chatbot_conversation(message)
-    else:
-        return ret
+    while "currently loading" in ret:
+        ret = get_chatbot_conversation(message)
+    
+    return ret
 
