@@ -61,7 +61,7 @@ async def on_message(message):
         await message.channel.send(get_quordle_results())
 
     # Chatbot - get response
-    if client.active_chatbot:
+    if client.active_chatbot and '!scrugbot' not in message.content:
         async with message.channel.typing():
             response = get_chatbot_conversation(message)
         bot_response = response.get('generated_text', None)

@@ -120,7 +120,10 @@ def get_chatbot_conversation(message):
     huggingface_token = os.getenv('HUGFACE')
     # format the header in our request to Hugging Face
     request_headers = {'Authorization': 'Bearer {}'.format(huggingface_token)}
-    payload = {'inputs': {'text': message.content}}
+    # Clean the text
+    content = message.content
+    content = content.replace("!","")
+    payload = {'inputs': {'text': content}}
     data = json.dumps(payload)
     response = requests.request('POST',
                                 api,
