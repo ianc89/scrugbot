@@ -127,5 +127,9 @@ def get_chatbot_conversation(message):
                                 headers=request_headers,
                                 data=data)
     ret = json.loads(response.content.decode('utf-8'))
-    return ret
+
+    if "currently loading" in ret:
+        return get_chatbot_conversation(message)
+    else:
+        return ret
 
