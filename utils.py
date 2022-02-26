@@ -1,6 +1,7 @@
 import json
 import requests
 import re
+import os
 
 def get_word():
     # Get a 5 letter word
@@ -112,3 +113,19 @@ def get_quordle_results():
         message += "```"
     message += "\n"
     return message
+
+def get_chatbot_conversation(message):
+    # huggingface api
+    api = "https://api-inference.huggingface.co/models/ianc89/hagrid"
+    huggingface_token = os.getenv('HUGFACE')
+    # format the header in our request to Hugging Face
+    request_headers = {'Authorization': 'Bearer {}'.format(huggingface_token)}
+    payload = {'inputs': {'text': message.content}}
+    data = json.dumps(payload)
+    response = requests.request('POST',
+                                api,
+                                headers=request_headers,
+                                data=data)
+    ret = json.loads(response.content.decode('utf-8'))
+    return ret
+

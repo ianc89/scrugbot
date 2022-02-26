@@ -2,7 +2,7 @@ import os
 import re
 import discord
 import dotenv
-from utils import get_word, read_history, get_emoji_numbers, get_wordle_results, get_quordle_results
+from utils import get_word, read_history, get_emoji_numbers, get_wordle_results, get_quordle_results, get_chatbot_conversation
 from db import dbcsv
 
 # Load .env file
@@ -25,6 +25,8 @@ quordle_match = re.compile(quordle_match_str)
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
+    # Decorate the client with info about running chatbot
+    client.active_chatbot = False
 
 @client.event
 async def on_message(message):
@@ -38,7 +40,7 @@ async def on_message(message):
         await message.channel.send(f'Hello {message.author.display_name}!')
 
     if message.content == '!scrugbot help':
-        help_msg = "Use scrugbot as !scrugbot [rebuild|word|wordle|quordle]\nScrugbot will also store wordle and quordle results automatically and give you some motivation!\nUse rebuild only if the result databases need to be rebuilt.\nUse word to get a 5 letter word tip.\nUse wordle|quordle to see the results of all users!\n"
+        help_msg = "Use scrugbot as !scrugbot [rebuild|word|wordle|quordle|chat|stop]\nScrugbot will also store wordle and quordle results automatically and give you some motivation!\nUse rebuild only if the result databases need to be rebuilt.\nUse word to get a 5 letter word tip.\nUse wordle|quordle to see the results of all users!\nUse chat to turn on a tester Hagrid chatbot!\nUse stop to deactivate it!\n"
         await message.channel.send(help_msg)
 
     if message.content == '!scrugbot rebuild':
@@ -57,6 +59,27 @@ async def on_message(message):
     # Wordle - print results
     if message.content == '!scrugbot quordle':
         await message.channel.send(get_quordle_results())
+
+    # Chatbot - get response
+    if client.active_chatbot:
+        async with message.channel.typing():
+            response = get_chatbot_conversation(message)
+        bot_response = response.get('generated_text', None)
+        if not bot_response:
+            if 'error' in response:
+                bot_response = '`Error: {}`'.format(response['error'])
+            else:
+                bot_response = 'Hmm... something is not right.'
+        await message.channel.send(bot_response)
+    
+    # Chatbot - On
+    if message.content == '!scrugbot chat':
+        client.active_chatbot = True
+        await message.channel.send("scrugbot is sentient")
+    # Chatbot - Off
+    if message.content == '!scrugbot stop':
+        client.active_chatbot = False
+        await message.channel.send("scrugbot is dumb")
 
     # Wordle responses
     x = wordle_match.match(message.content)
