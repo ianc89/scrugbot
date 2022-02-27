@@ -133,8 +133,9 @@ async def get_chatbot_conversation(message):
     ret = json.loads(response.content.decode('utf-8'))
     
     # If currently loading, enter into a recursive function
-    if "currently loading" in ret:
-        return get_chatbot_conversation(message)
+    if "error" in ret:
+        if "currently loading" in ret['error']:
+            return get_chatbot_conversation(message)
     else:
         return ret
 
