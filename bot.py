@@ -85,7 +85,7 @@ async def on_message(message):
     x = wordle_match.match(message.content)
     if x:
         username = message.author.display_name
-        wordledb.write([message.id, message.created_at, username, x.groups()[0], x.groups()[1], x.groups()[2]])
+        wordledb.write([message.id, message.created_at, message.author.name, x.groups()[0], x.groups()[1], x.groups()[2]])
         if "1/6" == x.groups()[2]:
             await message.channel.send(f"Amazing work {username}!")
         elif "2/6" == x.groups()[2]:
@@ -108,7 +108,7 @@ async def on_message(message):
         results = get_emoji_numbers(message.content)
         # Total is 4*8 = 32
         total = sum(results)
-        quordldb.write([message.id, message.created_at, username, x.groups()[0], x.groups()[1], total])
+        quordldb.write([message.id, message.created_at, message.author.name, x.groups()[0], x.groups()[1], total])
         if total < 8:
             await message.channel.send(f"Damn, that's some quick quordling {username}!")
         elif total < 16:

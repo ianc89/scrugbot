@@ -37,8 +37,8 @@ def get_emoji_numbers(text):
     # Function to get emoji numbers
     # Just have a mapping
 
-    emoji_list =["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","0️⃣"]
-    emoji_real = [1,2,3,4,5,6,7,8,9,0]
+    emoji_list =["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🟥"]
+    emoji_real = [1,2,3,4,5,6,7,8,9,10]
 
     found_emoji = []
     for emoji, real in zip(emoji_list, emoji_real):
@@ -91,18 +91,20 @@ def get_quordle_results():
     users = {}
     for r in res:
         if r[0] not in users:
-            users[r[0]] = ["00-08:","08-16:","16-24:","24-32:","32+  :"]
+            users[r[0]] = ["00-10:","11-15:","16-20:","21-25:","26-30","31+  :"]
         val = int(r[1])
-        if val < 8:
+        if val < 11:
             users[r[0]][0] += "+"*res[r]
         elif val < 16:
             users[r[0]][1] += "+"*res[r]
-        elif val < 32:
+        elif val < 21:
             users[r[0]][2] += "+"*res[r]
-        elif val < 36:
+        elif val < 26:
             users[r[0]][3] += "+"*res[r]
-        else:
+        elif val < 31:
             users[r[0]][4] += "+"*res[r]
+        else:
+            users[r[0]][5] += "+"*res[r]
 
     # Now prepare message
     message = "\n"
@@ -136,6 +138,8 @@ async def get_chatbot_conversation(message):
     if "error" in ret:
         if "currently loading" in ret['error']:
             return get_chatbot_conversation(message)
+        else:
+            return ret
     else:
         return ret
 
