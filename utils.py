@@ -91,7 +91,7 @@ def get_quordle_results():
     users = {}
     for r in res:
         if r[0] not in users:
-            users[r[0]] = ["00-10:","11-15:","16-20:","21-25:","26-30","31+  :"]
+            users[r[0]] = ["00-10:","11-15:","16-20:","21-25:","26-30:","31+  :"]
         val = int(r[1])
         if val < 11:
             users[r[0]][0] += "+"*res[r]
@@ -136,7 +136,7 @@ async def get_chatbot_conversation(message):
     # If currently loading, enter into a recursive function
     if "error" in ret:
         if "currently loading" in ret['error']:
-            return get_chatbot_conversation(message)
+            return await get_chatbot_conversation(message)
         else:
             return ret
     else:
