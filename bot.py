@@ -63,7 +63,7 @@ async def on_message(message):
     # Chatbot - get response
     if client.active_chatbot and '!scrugbot' not in message.content:
         async with message.channel.typing():
-            response = get_chatbot_conversation(message)
+            response = await get_chatbot_conversation(message)
         bot_response = response.get('generated_text', None)
         if not bot_response:
             if 'error' in response:

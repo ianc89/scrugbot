@@ -114,7 +114,7 @@ def get_quordle_results():
     message += "\n"
     return message
 
-def get_chatbot_conversation(message):
+async def get_chatbot_conversation(message):
     # huggingface api
     api = "https://api-inference.huggingface.co/models/ianc89/hagrid"
     huggingface_token = os.getenv('HUGFACE')
@@ -132,8 +132,8 @@ def get_chatbot_conversation(message):
     ret = json.loads(response.content.decode('utf-8'))
     
     # If currently loading, enter into a recursive function
-    while "currently loading" in ret:
-        ret = get_chatbot_conversation(message)
-    
-    return ret
+    if "currently loading" in ret:
+        return get_chatbot_conversation(message)
+    else:
+        return ret
 
