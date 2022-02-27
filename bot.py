@@ -109,13 +109,15 @@ async def on_message(message):
         # Total is 4*8 = 32
         total = sum(results)
         quordldb.write([message.id, message.created_at, message.author.name, x.groups()[0], x.groups()[1], total])
-        if total < 8:
+        if total < 11:
             await message.channel.send(f"Damn, that's some quick quordling {username}!")
         elif total < 16:
-            await message.channel.send(f"Pretty decent quordle, {username}!")
-        elif total < 24:
+            await message.channel.send(f"Wow, decent quordle, {username}!")
+        elif total < 21:
+            await message.channel.send(f"Pretty good work, {username}!")
+        elif total < 26:
             await message.channel.send(f"Managed to stay on top of that, {username}!")
-        elif total < 32:
+        elif total < 31:
             await message.channel.send(f"Ooo that was tricky, {username}!")
         else:
             await message.channel.send(f"Beaten into submission, {username}...")

@@ -38,7 +38,7 @@ def get_emoji_numbers(text):
     # Just have a mapping
 
     emoji_list =["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🟥"]
-    emoji_real = [1,2,3,4,5,6,7,8,9,10]
+    emoji_real = [1,2,3,4,5,6,7,8,9,40]
 
     found_emoji = []
     for emoji, real in zip(emoji_list, emoji_real):
