@@ -115,6 +115,7 @@ def get_quordle_results():
     return message
 
 async def get_chatbot_conversation(message):
+    print ("In chatbot func")
     # huggingface api
     api = "https://api-inference.huggingface.co/models/ianc89/hagrid"
     huggingface_token = os.getenv('HUGFACE')
