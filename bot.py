@@ -4,14 +4,16 @@ import discord
 import dotenv
 from utils import get_word, read_history, get_emoji_numbers, get_wordle_results, get_quordle_results, get_chatbot_conversation
 from db import dbcsv
+from music import playlists
 
 # Load .env file
 dotenv.load_dotenv()
 
 # Discord bot client
-client   = discord.Client()
-wordledb = dbcsv("wordle.csv")
-quordldb = dbcsv("quordle.csv")
+client    = discord.Client()
+wordledb  = dbcsv("wordle.csv")
+quordldb  = dbcsv("quordle.csv")
+playlists = playlists()
 
 # Regex
 wordle_match_str = r"(Wordle) (\d+) (\d+/\d+)"
@@ -80,6 +82,23 @@ async def on_message(message):
     if message.content == '!scrugbot stop':
         client.active_chatbot = False
         await message.channel.send("scrugbot is dumb")
+
+    # Playlists
+    if message.content.startswith('!scrugbot add'):
+        c = message.content.split("!scrugbot add")[1]
+        p = c.split()[0]
+        s = c.split()[1:]
+        playlists.add_entry(p,s)
+
+    if message.content == '!scrugbot list':
+        await message.channel.send(playlists.list_playlists())
+
+    if message.content == '!scrugbot songs':
+        await message.channel.send(playlists.list_songs())
+
+    if message.content.startswith('!scrugbot playlist'):
+        p = message.content.split('!scrugbot playlist')[1]
+        await message.channel.send(playlists.list_songs_from_playlist(p))
 
     # Wordle responses
     x = wordle_match.match(message.content)

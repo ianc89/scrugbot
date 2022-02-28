@@ -26,3 +26,4 @@ class dbcsv(object):
 		writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 		writer.writerow(row)
 		csvfile.close()
+
