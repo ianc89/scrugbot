@@ -10,8 +10,15 @@ class playlists(object):
 		self.dbcsv.write([playlist_name,song_name])
 
 	def list_playlists(self):
-		df = pandas.read_csv(self.dbcsv.path, header=None)
-		available_playlists = df[0].unique()
+		try:
+			df = pandas.read_csv(self.dbcsv.path, header=None)
+		except:
+			return "`No database`"
+		try:
+			available_playlists = df[0].unique()
+		except:
+			return "`No playlists`"
+
 		ret_str = "```PLAYLISTS\n"
 		for p in available_playlists:
 			ret_str += " - " + p +"\n"
@@ -19,8 +26,15 @@ class playlists(object):
 		return ret_str
 
 	def list_songs_from_playlist(self, playlist_name):
-		df = pandas.read_csv(self.dbcsv.path, header=None)
-		playlist_df = df[df[0] == playlist_name]
+		try:
+			df = pandas.read_csv(self.dbcsv.path, header=None)
+		except:
+			return "`No database`"
+		try:
+			playlist_df = df[df[0] == playlist_name]
+		except:
+			return "`No playlist with that name`"
+
 		ret_str = f"```PLAYLIST - {playlist_name}\n"
 		for s in playlist_df[1]:
 			print (s)
@@ -29,7 +43,10 @@ class playlists(object):
 		return ret_str
 
 	def list_songs(self):
-		df = pandas.read_csv(self.dbcsv.path, header=None)
+		try:
+			df = pandas.read_csv(self.dbcsv.path, header=None)
+		except:
+			return "`No database`" 
 		ret_str = "```ALL SONGS\n"
 		for entry in df.sort_values(by=[0,1]).values:
 			ret_str += entry[0] + " - " + entry[1] + "\n"
