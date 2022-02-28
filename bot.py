@@ -27,7 +27,7 @@ quordle_match = re.compile(quordle_match_str)
 def help():
     # Help message function
     options = {
-    "usage:": "!scrugbot [setting] [optional]",
+    "usage": "!scrugbot [setting] [optional]",
     "info": "Scrugbot will store wordle and quordle results automatically",
     "rebuild":"Rebuild the word game databases",
     "word":"Get a 5 letter word suggestion",
@@ -43,7 +43,7 @@ def help():
     }
     ret_str = "```HELP for SCRUGBOT\n"
     for topic in options:
-        ret_str += topic + " - " + options[topic] + "\n"
+        ret_str += topic.ljust(25) + ": " + options[topic] + "\n"
     ret_str += "```"
     return ret_str
 
