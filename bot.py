@@ -24,6 +24,29 @@ quordle_match = re.compile(quordle_match_str)
 
 # Client functions
 
+def help():
+    # Help message function
+    options = {
+    "usage:": "!scrugbot [setting] [optional]",
+    "info": "Scrugbot will store wordle and quordle results automatically",
+    "rebuild":"Rebuild the word game databases",
+    "word":"Get a 5 letter word suggestion",
+    "wordle":"Display wordle results",
+    "quordle":"Display quordle results",
+    "chat":"Turn on the Hagrid chatbot",
+    "stop":"Turn off the Hagrid chatbot",
+    "add [playlist] [song]":"Add a [song] to the [playlist]",
+    "list":"List all stored playlist names",
+    "songs":"List all songs and playlists",
+    "playlist [playlist]":"List all songs in [playlist]",
+    "play [nsongs]":"Get [nsongs] randomly selected from the playlists",
+    }
+    ret_str = "```HELP for SCRUGBOT\n"
+    for topic in options:
+        ret_str += topic + " - " + options[topic] + "\n"
+    ret_str += "```"
+    return ret_str
+
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
@@ -42,7 +65,7 @@ async def on_message(message):
         await message.channel.send(f'Hello {message.author.display_name}!')
 
     if message.content == '!scrugbot help':
-        help_msg = "Use scrugbot as !scrugbot [rebuild|word|wordle|quordle|chat|stop]\nScrugbot will also store wordle and quordle results automatically and give you some motivation!\nUse rebuild only if the result databases need to be rebuilt.\nUse word to get a 5 letter word tip.\nUse wordle|quordle to see the results of all users!\nUse chat to turn on a tester Hagrid chatbot!\nUse stop to deactivate it!\n"
+        help_msg = help()
         await message.channel.send(help_msg)
 
     if message.content == '!scrugbot rebuild':
