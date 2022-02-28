@@ -97,7 +97,7 @@ async def on_message(message):
         await message.channel.send(playlists.list_songs())
 
     if message.content.startswith('!scrugbot playlist'):
-        p = message.content.split('!scrugbot playlist')[1]
+        p = message.content.split('!scrugbot playlist')[1].strip()
         await message.channel.send(playlists.list_songs_from_playlist(p))
 
     # Wordle responses
