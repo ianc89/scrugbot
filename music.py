@@ -60,7 +60,7 @@ class playlists(object):
 		try:
 			random_songs = df.sample(int(nsongs))
 		except:
-			return "`Provide a number of songs`"
+			return f"`Provide a number of songs less than {df.shape[0]}`"
 
 		ret_str = ""
 		for s in random_songs[1]:
