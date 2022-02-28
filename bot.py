@@ -87,7 +87,7 @@ async def on_message(message):
     if message.content.startswith('!scrugbot add'):
         c = message.content.split("!scrugbot add")[1]
         p = c.split()[0]
-        s = c.split()[1:]
+        s = " ".join(c.split()[1:])
         playlists.add_entry(p,s)
 
     if message.content == '!scrugbot list':
