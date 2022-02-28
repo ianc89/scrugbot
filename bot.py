@@ -84,10 +84,10 @@ async def on_message(message):
         await message.channel.send("scrugbot is dumb")
 
     # Playlists
-    if message.content.startswith('!scrugbot add'):
-        c = message.content.split("!scrugbot add")[1]
-        p = c.split()[0]
-        s = " ".join(c.split()[1:])
+    if message.content.startswith('!scrugbot add '):
+        c = message.content.split("!scrugbot add ")[1]
+        p = c.split()[0].strip()
+        s = " ".join(c.split()[1:]).strip()
         playlists.add_entry(p,s)
 
     if message.content == '!scrugbot list':
@@ -96,9 +96,16 @@ async def on_message(message):
     if message.content == '!scrugbot songs':
         await message.channel.send(playlists.list_songs())
 
-    if message.content.startswith('!scrugbot playlist'):
+    if message.content.startswith('!scrugbot playlist '):
         p = message.content.split('!scrugbot playlist')[1].strip()
         await message.channel.send(playlists.list_songs_from_playlist(p))
+
+    if message.content.startswith('!scrugbot play '):
+        nsongs = message.content.split("!scrugbot play ")[1]
+        await message.channel.send(playlists.get_random_songs(nsongs))
+
+    if message.content == '!scrugbot play':
+        await message.channel.send(playlists.get_random_songs())
 
     # Wordle responses
     x = wordle_match.match(message.content)

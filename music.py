@@ -37,7 +37,6 @@ class playlists(object):
 
 		ret_str = f"```PLAYLIST - {playlist_name}\n"
 		for s in playlist_df[1]:
-			print (s)
 			ret_str += " - "+s+"\n"
 		ret_str += "```"
 		return ret_str
@@ -52,6 +51,22 @@ class playlists(object):
 			ret_str += entry[0] + " - " + entry[1] + "\n"
 		ret_str += "```"
 		return ret_str
+
+	def get_random_songs(self, nsongs=10):
+		try:
+			df = pandas.read_csv(self.dbcsv.path, header=None)
+		except:
+			return "`No database`" 
+		try:
+			random_songs = df.sample(int(nsongs))
+		except:
+			return "`Provide a number of songs`"
+
+		ret_str = ""
+		for s in random_songs[1]:
+			ret_str += "+play " + s + "\n"
+		return ret_str
+
 
 
 
