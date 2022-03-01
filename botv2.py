@@ -6,17 +6,23 @@ from utils import get_word, read_history, get_emoji_numbers, get_wordle_results,
 from db import dbcsv
 from music import playlists
 
-# Using command decorators
+# Using command decorators now
 from discord.ext import commands
 
+# Change only the no_category default string
+help_command = commands.DefaultHelpCommand(
+    no_category = 'Commands'
+)
+
 # Our bot operator
-bot = commands.Bot(command_prefix='$', help_command=None)
+client = commands.Bot(
+    command_prefix='.', 
+    description="SCRUGBOT\nScrugbot will automatically store wordle and quordle results\n",
+    help_command = help_command
+    )
 
 # Load .env file
 dotenv.load_dotenv()
-
-# Discord bot client
-client    = discord.Client()
 
 # Databases
 wordledb  = dbcsv("wordle.csv")
@@ -30,41 +36,13 @@ wordle_match = re.compile(wordle_match_str)
 quordle_match_str = r"(Daily Quordle) \#(\d+)"
 quordle_match = re.compile(quordle_match_str)
 
-
-# Help information
-@bot.command()
-async def help(ctx):
-    # Help message function
-    options = {
-    "usage": "!scrugbot [setting] [optional]",
-    "info": "Scrugbot will store wordle and quordle results automatically",
-    "rebuild":"Rebuild the word game databases",
-    "word":"Get a 5 letter word suggestion",
-    "wordle":"Display wordle results",
-    "quordle":"Display quordle results",
-    "chat":"Turn on the Hagrid chatbot",
-    "stop":"Turn off the Hagrid chatbot",
-    "add [playlist] [song]":"Add a [song] to the [playlist]",
-    "list":"List all stored playlist names",
-    "songs":"List all songs and playlists",
-    "playlist [playlist]":"List all songs in [playlist]",
-    "play [nsongs]":"Get [nsongs] randomly selected from the playlists",
-    }
-    ret_str = "```HELP for SCRUGBOT\n"
-    for topic in options:
-        ret_str += topic.ljust(25) + ": " + options[topic] + "\n"
-    ret_str += "```"
-
-    # Send message back
-    await ctx.send(ret_str)
-
 # Greeting
-@bot.command()
+@client.command(help="Say hello!")
 async def hello(ctx):
     await ctx.send(f'Hello {ctx.message.author.display_name}!')
 
 # Rebuild function
-@bot.command()
+@client.command(help="Rebuild the word game databases")
 async def rebuild(ctx):
     await ctx.send('Rebuilding results')
     await read_history(client, wordledb, wordle_match)
@@ -72,38 +50,41 @@ async def rebuild(ctx):
     await ctx.send('Finished rebuild request')
 
 # Word function
-@bot.command()
+@client.command(help="Get a 5 letter word suggestion")
 async def word(ctx):
     await ctx.send(f"Why not try ... {get_word()}")
 
 # Wordle results function
-@bot.command()
+@client.command(help="Display wordle results")
 async def wordle(ctx):
     await ctx.send(get_wordle_results())
 
 # Quordle results function
-@bot.command()
+@client.command(help="Display quordle results")
 async def quordle(ctx):
     await ctx.send(get_quordle_results())
 
 # Chatbot functions
 # Turn on
-@bot.command()
+@client.command(help="Turn on the Hagrid chatbot")
 async def chat(ctx):
     client.active_chatbot = True
     await ctx.send("scrugbot is sentient")
 
 # Turn off
-@bot.command()
+@client.command(help="Turn off the Hagrid chatbot")
 async def stop(ctx):
     client.active_chatbot = False
     await ctx.send("scrugbot is dumb")
 
 # Ask
-@bot.command()
-async def ask(ctx, *args):
+@client.command(help="Ask chatbot a question")
+async def ask(ctx, *question):
+    if not client.active_chatbot:
+        return
+
     async with ctx.message.channel.typing():
-        response = await get_chatbot_conversation(" ".join(args))
+        response = await get_chatbot_conversation(" ".join(question))
         bot_response = response.get('generated_text', None)
         if not bot_response:
             if 'error' in response:
@@ -114,7 +95,7 @@ async def ask(ctx, *args):
 
 # Playlist functions
 # Add
-@bot.command()
+@client.command(help="Add a song to the playlist")
 async def add(ctx, playlist, *songname):
     p = playlist.strip()
     s = " ".join(songname).strip()
@@ -122,25 +103,25 @@ async def add(ctx, playlist, *songname):
     await ctx.send(f"`Added {s} to {p}`")
 
 # List
-@bot.command()
+@client.command(help="List all stored playlist names")
 async def list(ctx):
     await ctx.send(playlists.list_playlists())
 
 # Songs
-@bot.command()
+@client.command(help="List all songs and playlists")
 async def songs(ctx):
     await ctx.send(playlists.list_songs())
 
 # Playlist
-@bot.command()
+@client.command(help="List all songs in a playlist")
 async def playlist(ctx, playlist):
     await ctx.send(playlists.list_songs_from_playlist(playlist))
 
 # Get random songs
-@bot.command()
-async def play(ctx, *nsongs):
+@client.command(help="Get a random selection of songs from all playlists")
+async def play(ctx, nsongs=10):
     if nsongs:
-        await ctx.send(playlists.get_random_songs(nsongs[0]))
+        await ctx.send(playlists.get_random_songs(nsongs))
     else:
         await ctx.send(playlists.get_random_songs())
 
@@ -198,6 +179,9 @@ async def on_message(message):
             await message.channel.send(f"Ooo that was tricky, {username}!")
         else:
             await message.channel.send(f"Beaten into submission, {username}...")
+
+    # Special - We override on_message, so need to add this to process custom commands
+    await client.process_commands(message)
 
     
 # Run client
