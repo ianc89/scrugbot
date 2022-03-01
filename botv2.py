@@ -183,6 +183,15 @@ async def on_message(message):
     # Special - We override on_message, so need to add this to process custom commands
     await client.process_commands(message)
 
-    
+# If invalid command
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send("**Invalid command. Try using** `help` **to figure out commands!**")
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send('**Please pass in all requirements.**')
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("**You dont have all the requirements or permissions for using this command :angry:**")
+
 # Run client
 client.run(os.getenv('TOKEN'))
