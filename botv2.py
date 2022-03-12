@@ -30,7 +30,7 @@ quordldb  = dbcsv("quordle.csv")
 playlists = playlists()
 
 # Regex
-wordle_match_str = r"(Wordle) (\d+) (\d+/\d+)"
+wordle_match_str = r"(Wordle) (\d+) (\d+/\d+|X/\d+)"
 wordle_match = re.compile(wordle_match_str)
 
 quordle_match_str = r"(Daily Quordle) \#(\d+)"
