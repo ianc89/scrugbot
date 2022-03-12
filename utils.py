@@ -57,7 +57,7 @@ def get_wordle_results():
     users = {}
     for r in res:
         if r[0] not in users:
-            users[r[0]] = ["1:","2:","3:","4:","5:","6:"]
+            users[r[0]] = ["1:","2:","3:","4:","5:","6:","X:"]
         if r[1] == "1/6":
             users[r[0]][0] += "+"*res[r]
         elif r[1] == "2/6":
@@ -70,11 +70,13 @@ def get_wordle_results():
             users[r[0]][4] += "+"*res[r]
         elif r[1] == "6/6":
             users[r[0]][5] += "+"*res[r]
+        elif r[1] == "X/6":
+            users[r[0]][6] += "+"*res[r]
 
     # Now prepare message
     message = "\n"
     for user in users:
-        message += "---- "+user+"\n```"
+        message += "*"+user+"*\n```"
         for r in users[user]:
             message += r+"\n"
         message += "```"
