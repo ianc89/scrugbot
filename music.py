@@ -47,12 +47,8 @@ class playlists(object):
 		except:
 			return ["`No database`"]
 		ret = []
-		tmp = []
 		for i,entry in enumerate(df.sort_values(by=[0,1]).values):
-			if i%20 == 0:
-				ret.append(tmp)
-				tmp = []
-			tmp.append(entry[0] + " - " + entry[1])
+			ret.append(entry[0] + " - " + entry[1])
 		return ret
 
 	def get_random_songs(self, nsongs=10):

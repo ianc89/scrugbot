@@ -112,16 +112,17 @@ async def list(ctx):
 async def songs(ctx):
     async with ctx.message.channel.typing():
         songs = await playlists.list_songs()
-        for s in songs:
-            await ctx.send('```'+"\n".join(s)+'```')
+        for s in range(0, len(songs), 20):
+            string = "```"+"\n".join(songs[s:s+20])+"```"
+            await ctx.send(string)
 
 # Playlist
 @client.command(help="List all songs in a playlist")
 async def playlist(ctx, playlist):
     async with ctx.message.channel.typing():
         songs = await playlists.list_songs_from_playlist(playlist)
-        for s in range(0, len(songs), 10):
-            string = "```"+"\n".join(songs[s:s+10])+"```"
+        for s in range(0, len(songs), 20):
+            string = "```"+"\n".join(songs[s:s+20])+"```"
             await ctx.send(string)
 
 # Get random songs
