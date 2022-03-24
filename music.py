@@ -45,12 +45,15 @@ class playlists(object):
 		try:
 			df = pandas.read_csv(self.dbcsv.path, header=None)
 		except:
-			return "`No database`" 
-		ret_str = "```ALL SONGS\n"
-		for entry in df.sort_values(by=[0,1]).values:
-			ret_str += entry[0] + " - " + entry[1] + "\n"
-		ret_str += "```"
-		return ret_str
+			return ["`No database`"]
+		ret = []
+		tmp = []
+		for i,entry in enumerate(df.sort_values(by=[0,1]).values):
+			if i%20 == 0:
+				ret.append(tmp)
+				tmp = []
+			tmp.append(entry[0] + " - " + entry[1])
+		return ret
 
 	def get_random_songs(self, nsongs=10):
 		try:
