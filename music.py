@@ -25,7 +25,7 @@ class playlists(object):
 		ret_str += "```"
 		return ret_str
 
-	def list_songs_from_playlist(self, playlist_name):
+	async def list_songs_from_playlist(self, playlist_name):
 		try:
 			df = pandas.read_csv(self.dbcsv.path, header=None)
 		except:
@@ -35,11 +35,11 @@ class playlists(object):
 		except:
 			return "`No playlist with that name`"
 
-		ret_str = f"```PLAYLIST - {playlist_name}\n"
+		ret = []
+		ret.append(f"PLAYLIST - {playlist_name}")
 		for s in playlist_df[1]:
-			ret_str += " - "+s+"\n"
-		ret_str += "```"
-		return ret_str
+			ret.append(" - "+s)
+		return ret
 
 	async def list_songs(self):
 		try:
