@@ -41,7 +41,7 @@ class playlists(object):
 		ret_str += "```"
 		return ret_str
 
-	def list_songs(self):
+	async def list_songs(self):
 		try:
 			df = pandas.read_csv(self.dbcsv.path, header=None)
 		except:
