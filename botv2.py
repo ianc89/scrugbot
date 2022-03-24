@@ -119,7 +119,7 @@ async def songs(ctx):
 @client.command(help="List all songs in a playlist")
 async def playlist(ctx, playlist):
     async with ctx.message.channel.typing():
-        songs = playlists.list_songs_from_playlist(playlist)
+        songs = await playlists.list_songs_from_playlist(playlist)
         for s in range(0, len(songs), 10):
             string = "```"+"\n".join(songs[s:s+10])+"```"
             await ctx.send(string)
